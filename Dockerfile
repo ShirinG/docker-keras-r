@@ -24,9 +24,12 @@ RUN python -m pip --no-cache-dir install --upgrade \
     pip \
     setuptools \
     virtualenv
-    
+
+RUN R -e "install.packages('reticulate')"
+RUN R -e "reticulate::install_miniconda(path = '/home/rstudio/.local/share/r-miniconda', update = TRUE, force = FALSE)"
+
 RUN R -e "devtools::install_github('rstudio/keras')"
-RUN R -e "keras::install_keras(version = '2.3.1', tensorflow = '2.2.0')"
+RUN R -e "keras::install_keras(method = 'virtualenv', version = '2.3.1', tensorflow = '2.2.0', extra_packages = c('tensorflow-hub'))"
 
 EXPOSE 8787
 
